@@ -1,7 +1,19 @@
-import '../styles/globals.css'
+import MainLayout from '@/components/common/MainLayout'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@/theme'
+import { CssBaseline } from '@mui/material'
+import { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+
+export default function MyApp(props: AppProps) {
+  const { Component, pageProps } = props
+  return (
+    <ThemeProvider theme={theme}>{/* Emotionで定義したテーマを注入 */}
+      <CssBaseline />{/* normarize.cssの代替 */}
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
+    </ThemeProvider>
+  )
 }
 
-export default MyApp

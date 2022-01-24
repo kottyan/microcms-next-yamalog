@@ -1,20 +1,47 @@
-import { client } from "../../libs/client"
-import { queryToString } from "../../utils/common"
-import styles from '../../styles/Home.module.scss'
+import { client } from '@/libs/client'
+import {
+  queryToString,
+  getFormattedJpTime
+} from '@/utils/common'
+import {
+  Container,
+  Typography,
+  Stack
+} from '@mui/material'
+import {
+  Edit as EditIcon
+} from '@mui/icons-material'
 import { GetStaticProps, GetStaticPaths } from 'next'
+
 
 export default function BlogId({ blog }) {
   return (
-    <main className={styles.main}>
-      <h1 className={styles.title}>{blog.title}</h1>
-      <p className={styles.publishedAt}>{blog.publishedAt}</p>
+    <Container
+      sx={{
+        height: '100%',
+        padding: '16px'
+      }}
+    >
+      <Typography variant="h4">
+        {blog.title}
+      </Typography>
+      <Stack
+        direction="row"
+        spacing={1}
+      >
+        <EditIcon />
+        <Typography noWrap>
+          投稿日：{getFormattedJpTime(blog.publishedAt)}
+        </Typography>
+      </Stack>
+      {/* TODO: できればMUIコンポーネントで実装する。 */}
       <div
         dangerouslySetInnerHTML={{
-          __html: `${blog.body}`,
+          __html: `${blog.body}`
         }}
-        className={styles.post}
+        style={{ padding: '16px' }}
       />
-    </main>
+    </Container>
   )
 }
 
