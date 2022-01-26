@@ -14,10 +14,10 @@ export function queryToString (value: string | string[]): string | undefined {
 
 /**
  * クエリパラメータを文字列として取得する
- * @param {string} 日付データ（ISO 8601形式のUTC）
+ * @param {Date} 日付データ（ISO 8601形式のUTC）
  * @return {string} YYYY/MM/DD形式の日本日付
  */
-export function getFormattedJpTime (value: string): string {
+export function getFormattedJpTime (value: Date): string {
   dayjs.extend(utc)
   dayjs.extend(timezone)
   return dayjs.utc(value).tz('Asia/Tokyo').format('YYYY/MM/DD')

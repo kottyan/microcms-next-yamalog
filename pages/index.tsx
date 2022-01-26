@@ -6,10 +6,21 @@ import {
 } from '@mui/material'
 import BaseLink from '@/components/common/BaseLink'
 
-export default function Home({ blog }) {
+interface Blog {
+  id: string,
+  title: string,
+  body: string,
+  publishedAt: Date
+}
+
+interface PageProps {
+  blogList: Blog[]
+}
+
+export default function Home({ blogList }: PageProps) {
   return (
     <List>
-      {blog.map((blog) => (
+      {blogList.map((blog) => (
         <ListItem key={blog.id} divider={true} sx={{padding: '16px'}}>
           <BaseLink href={`/blog/${blog.id}`} text={blog.title} />
         </ListItem>
@@ -25,7 +36,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      blog: data.contents,
+      blogList: data.contents,
     },
   }
 }
