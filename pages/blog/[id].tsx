@@ -1,4 +1,4 @@
-import { client } from '@/libs/client'
+import { api } from '@/libs/api'
 import {
   queryToString,
   getFormattedJpTime
@@ -47,7 +47,7 @@ export default function BlogId({ blog }) {
 
 // 静的生成のためのパスを指定します
 export const getStaticPaths: GetStaticPaths = async () => {
-  const data = await client.get({ endpoint: "blog" })
+  const { data } = await api.get('blog')
 
   const paths = data.contents.map((content) => `/blog/${content.id}`)
   return { paths, fallback: false }
@@ -57,7 +57,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = queryToString(params.id)
-  const data = await client.get({ endpoint: "blog", contentId: id})
+  const { data } = await api.get(`blog/${id}`)
 
   return {
     props: {
