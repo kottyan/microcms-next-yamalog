@@ -32,7 +32,7 @@ export default function Home({ blogList }: PageProps) {
 // ビルド時にサーバー側でデータを取得する
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await api.get('blog')
+  const { data } = await api.get('blog?limit=100')
 
   return {
     props: {

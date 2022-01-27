@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 
 type PreviewParams = {
-  id: string,
+  slug: string,
   draftKey: string
 }
 
@@ -79,7 +79,7 @@ export default function BlogId({ blog }: PageProps) {
 
 // 静的生成のためのパスを指定します
 export const getStaticPaths: GetStaticPaths<PageParams> = async () => {
-  const { data } = await api.get('blog')
+  const { data } = await api.get('blog?limit=100')
 
   const paths = data.contents.map((content: Blog) => `/blog/${content.id}`)
   return { paths, fallback: true }
@@ -93,24 +93,28 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async (cont
     return (
       typeof value === 'object' &&
       value !== null &&
-      Object.keys(value)[0] === 'id' &&
+      Object.keys(value)[0] === 'slug' &&
       Object.keys(value)[1] === 'draftKey'
     )
   }
 
   const isPreview = context.preview === true
+  console.log(`プレビューモード: ${isPreview}`)
   let path = ''
   if(isPreview) {
-    const id = isPreviewParams(context.previewData) ? context.previewData.id : ''
+    const id = isPreviewParams(context.previewData) ? context.previewData.slug : ''
     const draftKey = isPreviewParams(context.previewData) ? context.previewData.draftKey : ''
     // TODO 型エラーにならない方法考える
     // if(!id || !draftKey) return { notFound: true }
     path = `/blog/${id}?draftKey=${draftKey}`
+    console.log(`URL: ${path}`)
   } else {
     const id = context.params?.id ?? ''
     path = `/blog/${id}`
   }
+  console.log(`API: ${api}`)
   const { data } = await api.get(path)
+  console.log(`取得データ: ${data}`)
 
   return {
     props: {
